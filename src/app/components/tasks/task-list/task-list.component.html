@@ -1,77 +1,97 @@
 <div class="container mx-auto p-4">
-    <h2 class="text-3xl font-bold mb-6">Tasks</h2>
+  <h2 class="text-3xl font-bold mb-6">Tasks</h2>
 
-    @if(completedLoading() && pendingLoading()) {
-    <div class="bg-white shadow-md rounded-lg p-4">
-        <div class="text-gray-600">Loading...</div>
+  @if(completedLoading() && pendingLoading()) {
+  <div class="bg-white shadow-md rounded-lg p-4">
+    <div class="text-gray-600">Loading...</div>
+  </div>
+  } @else {
+  <ng-container *ngTemplateOutlet="content"></ng-container>
+  }
+  <ng-template #content>
+    @if(completedError() && pendingError()) {
+    <div class="text-red-600">{{ completedError() }} {{ pendingError() }}</div>
+    } @else {
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <h3 class="text-2xl font-bold mb-4">Ongoing Tasks</h3>
+        <ng-container *ngTemplateOutlet="ongoingTasks"></ng-container>
+      </div>
+      <div>
+        <h3 class="text-2xl font-bold mb-4">Completed Tasks</h3>
+        <ng-container *ngTemplateOutlet="completedTasks"></ng-container>
+      </div>
     </div>
     }
 
-    @else {
-    <ng-container *ngTemplateOutlet="content"></ng-container>
-    }
-    <ng-template #content>
-        @if(completedError() && pendingError()) {
-        <div class="text-red-600">{{ completedError() }} {{ pendingError() }}</div>
+    <ng-template #ongoingTasks>
+      <ul class="space-y-4">
+        @if(pendingTasks().length === 0){
+        <li class="bg-white shadow-md rounded-lg p-4">
+          <p class="text-gray-600">No ongoing tasks found.</p>
+        </li>
+        } @for (task of pendingTasks(); track $index) {
+        <li class="bg-white shadow-md rounded-lg p-4">
+          <a
+            [routerLink]="['/tasks', task._id]"
+            class="text-blue-600 hover:underline text-lg font-semibold"
+          >
+            {{ task.title }}
+          </a>
+        </li>
         }
-
-        @else {
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <h3 class="text-2xl font-bold mb-4">Ongoing Tasks</h3>
-                <ng-container *ngTemplateOutlet="ongoingTasks"></ng-container>
-            </div>
-            <div>
-                <h3 class="text-2xl font-bold mb-4">Completed Tasks</h3>
-                <ng-container *ngTemplateOutlet="completedTasks"></ng-container>
-            </div>
-        </div>
-        }
-
-        <ng-template #ongoingTasks>
-            <ul class="space-y-4">
-                @if(pendingTasks().length === 0){
-                <li class="bg-white shadow-md rounded-lg p-4">
-                    <p class="text-gray-600">No ongoing tasks found.</p>
-                </li>
-                }
-                @for (task of pendingTasks(); track $index) {
-                <li class="bg-white shadow-md rounded-lg p-4">
-                    <a [routerLink]="['/tasks', task._id]" class="text-blue-600 hover:underline text-lg font-semibold">
-                        {{ task.title }}
-                    </a>
-                </li>
-                }
-            </ul>
-            <div class="flex justify-between mt-4">
-                <button (click)="previousPendingPage()" [disabled]="pendingCurrentPage() === 1"
-                    class="bg-blue-500 text-white px-4 py-2 rounded">Previous</button>
-                <button (click)="nextPendingPage()" [disabled]="pendingCurrentPage === pendingTotalPages"
-                    class="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
-            </div>
-        </ng-template>
-
-        <ng-template #completedTasks>
-            <ul class="space-y-4">
-                @if(completedTasks$().length === 0){
-                <li class="bg-white shadow-md rounded-lg p-4">
-                    <p class="text-gray-600">No completed tasks found.</p>
-                </li>
-                }
-                @for (task of completedTasks$(); track $index) {
-                <li class="bg-white shadow-md rounded-lg p-4">
-                    <a [routerLink]="['/tasks', task._id]" class="text-blue-600 hover:underline text-lg font-semibold">
-                        {{ task.title }}
-                    </a>
-                </li>
-                }
-            </ul>
-            <div class="flex justify-between mt-4">
-                <button (click)="previousCompletedPage()" [disabled]="completedCurrentPage() === 1"
-                    class="bg-blue-500 text-white px-4 py-2 rounded">Previous</button>
-                <button (click)="nextCompletedPage()" [disabled]="completedCurrentPage === completedTotalPages"
-                    class="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
-            </div>
-        </ng-template>
+      </ul>
+      <div class="flex justify-between mt-4">
+        <button
+          (click)="previousPendingPage()"
+          [disabled]="pendingCurrentPage() === 1"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Previous
+        </button>
+        <button
+          (click)="nextPendingPage()"
+          [disabled]="pendingCurrentPage === pendingTotalPages"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Next
+        </button>
+      </div>
     </ng-template>
+
+    <ng-template #completedTasks>
+      <ul class="space-y-4">
+        @if(completedTasks$().length === 0){
+        <li class="bg-white shadow-md rounded-lg p-4">
+          <p class="text-gray-600">No completed tasks found.</p>
+        </li>
+        } @for (task of completedTasks$(); track $index) {
+        <li class="bg-white shadow-md rounded-lg p-4">
+          <a
+            [routerLink]="['/tasks', task._id]"
+            class="text-blue-600 hover:underline text-lg font-semibold"
+          >
+            {{ task.title }}
+          </a>
+        </li>
+        }
+      </ul>
+      <div class="flex justify-between mt-4">
+        <button
+          (click)="previousCompletedPage()"
+          [disabled]="completedCurrentPage() === 1"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Previous
+        </button>
+        <button
+          (click)="nextCompletedPage()"
+          [disabled]="completedCurrentPage === completedTotalPages"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Next
+        </button>
+      </div>
+    </ng-template>
+  </ng-template>
 </div>

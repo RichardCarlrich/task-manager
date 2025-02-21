@@ -5,10 +5,10 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { Meta } from '@angular/platform-browser';
 
 @Component({
-    selector: 'app-root',
-    imports: [RouterOutlet, FooterComponent, NavbarComponent],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+  selector: 'app-root',
+  imports: [RouterOutlet, FooterComponent, NavbarComponent],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'task-management-app';

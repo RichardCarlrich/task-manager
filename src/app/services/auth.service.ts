@@ -24,7 +24,11 @@ export class AuthService {
   register(user: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, user).pipe(
       tap((response: any) => {
-        this.handleAuthentication(response.token, response.expiresIn, response.user.role);
+        this.handleAuthentication(
+          response.token,
+          response.expiresIn,
+          response.user.role
+        );
       })
     );
   }
@@ -32,7 +36,11 @@ export class AuthService {
   login(user: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, user).pipe(
       tap((response: any) => {
-        this.handleAuthentication(response.token, response.expiresIn, response.user.role);
+        this.handleAuthentication(
+          response.token,
+          response.expiresIn,
+          response.user.role
+        );
       })
     );
   }
@@ -47,6 +55,7 @@ export class AuthService {
 
   isAdmin(): boolean {
     const role = sessionStorage.getItem('role');
+    console.log(role);
     return role === 'admin';
   }
 
