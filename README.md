@@ -89,7 +89,7 @@ This is a full-stack task management application built using Angular, Node.js, E
 
 ## Running the Application
 
-- The backend server will run on `http://localhost:3000`.
+- The backend server will run on `http://localhost:5000`.
 - The frontend server will run on `http://localhost:4200`.
 
 ## API Endpoints
